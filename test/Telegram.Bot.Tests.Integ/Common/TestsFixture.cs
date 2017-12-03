@@ -114,10 +114,9 @@ namespace Telegram.Bot.Tests.Integ.Common
 
         public void Dispose()
         {
-            var source = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+            var source = new CancellationTokenSource(TimeSpan.FromSeconds(45));
             UpdateReceiver.DiscardNewUpdatesAsync(source.Token).GetAwaiter().GetResult();
 
-            source = new CancellationTokenSource(TimeSpan.FromSeconds(20));
             BotClient.SendTextMessageAsync(
                 SuperGroupChatId,
                 "```\nTest execution is finished.\n```",

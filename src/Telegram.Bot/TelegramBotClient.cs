@@ -13,7 +13,6 @@ using Telegram.Bot.Args;
 using Telegram.Bot.Exceptions;
 using Telegram.Bot.Helpers;
 using Telegram.Bot.Requests;
-using Telegram.Bot.Responses;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineQueryResults;
@@ -201,15 +200,14 @@ namespace Telegram.Bot
         /// <summary>
         /// Send a request to Bot API
         /// </summary>
-        /// <typeparam name="TResponse">Type of expected result in the response object</typeparam>
+        /// <typeparam name="TResult">Type of expected result in the response object</typeparam>
         /// <param name="request">API request object</param>
         /// <param name="cancellationToken"></param>
         /// <returns>Result of the API request</returns>
-        public async Task<TResponse> MakeRequestAsync<TResponse>(
-            IRequest<TResponse> request,
+        public async Task<TResult> MakeRequestAsync<TResult>(
+            IRequest<TResult> request,
             CancellationToken cancellationToken = default
         )
-            where TResponse : IResponse
         {
             if (_invalidToken)
                 throw new ApiRequestException("Invalid token", 401);
@@ -271,8 +269,8 @@ namespace Telegram.Bot
             }
 
             var apiResponse =
-                JsonConvert.DeserializeObject<ApiResponse<TResponse>>(responseJson, SerializerSettings)
-                    ?? new ApiResponse<TResponse> // ToDo is required? unit test
+                JsonConvert.DeserializeObject<ApiResponse<TResult>>(responseJson, SerializerSettings)
+                    ?? new ApiResponse<TResult> // ToDo is required? unit test
                     {
                         Ok = false,
                         Description = "No response received"
@@ -504,7 +502,7 @@ namespace Telegram.Bot
         /// <returns>Returns basic information about the bot in form of <see cref="User"/> object</returns>
         /// <see href="https://core.telegram.org/bots/api#getme"/>
         public Task<User> GetMeAsync(CancellationToken cancellationToken = default)
-            => SendWebRequestAsync<User>("getMe", cancellationToken: cancellationToken);
+            => MakeRequestAsync(new GetMeRequest(), cancellationToken);
 
         /// <summary>
         /// Use this method to send text messages. On success, the sent Description is returned.
@@ -805,9 +803,7 @@ namespace Telegram.Bot
             {
                 DisableNotification = disableNotification,
                 ReplyToMessageId = replyToMessageId,
-            }, cancellationToken)
-            .ContinueWith(t => t.Result.ToArray(), cancellationToken)
-        ;
+            }, cancellationToken);
 
         /// <summary>
         /// Use this method to send point on the map. On success, the sent Description is returned.

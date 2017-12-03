@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Telegram.Bot.Args;
 using Telegram.Bot.Requests;
-using Telegram.Bot.Responses;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineQueryResults;
@@ -98,15 +97,14 @@ namespace Telegram.Bot
         /// <summary>
         /// Send a request to Bot API
         /// </summary>
-        /// <typeparam name="TResponse">Type of expected result in the response object</typeparam>
+        /// <typeparam name="TResult">Type of expected result in the response object</typeparam>
         /// <param name="request">API request object</param>
         /// <param name="cancellationToken"></param>
         /// <returns>Result of the API request</returns>
-        Task<TResponse> MakeRequestAsync<TResponse>(
-            IRequest<TResponse> request,
+        Task<TResult> MakeRequestAsync<TResult>(
+            IRequest<TResult> request,
             CancellationToken cancellationToken = default
-        )
-            where TResponse : IResponse;
+        );
 
         /// <summary>
         /// Test the API token
