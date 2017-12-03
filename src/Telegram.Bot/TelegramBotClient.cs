@@ -206,7 +206,7 @@ namespace Telegram.Bot
         /// <returns>Result of the API request</returns>
         public async Task<TResult> MakeRequestAsync<TResult>(
             IRequest<TResult> request,
-            CancellationToken cancellationToken = default
+            CancellationToken cancellationToken
         )
         {
             if (_invalidToken)
@@ -501,8 +501,8 @@ namespace Telegram.Bot
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Returns basic information about the bot in form of <see cref="User"/> object</returns>
         /// <see href="https://core.telegram.org/bots/api#getme"/>
-        public Task<User> GetMeAsync(CancellationToken cancellationToken = default)
-            => MakeRequestAsync(new GetMeRequest(), cancellationToken);
+        public Task<User> GetMeAsync(CancellationToken cancellationToken = default) =>
+            MakeRequestAsync(new GetMeRequest(), cancellationToken);
 
         /// <summary>
         /// Use this method to send text messages. On success, the sent Description is returned.
@@ -2097,16 +2097,11 @@ namespace Telegram.Bot
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>On success, a StickerSet object is returned.</returns>
         /// <see href="https://core.telegram.org/bots/api#getstickerset"/>
-        public Task<StickerSet> GetStickerSetAsync(string name,
-            CancellationToken cancellationToken = default)
-        {
-            var parameters = new Dictionary<string, object>()
-            {
-                {"name", name}
-            };
-
-            return SendWebRequestAsync<StickerSet>("getStickerSet", parameters, cancellationToken);
-        }
+        public Task<StickerSet> GetStickerSetAsync(
+            string name,
+            CancellationToken cancellationToken = default
+        ) =>
+            MakeRequestAsync(new GetStickerSetRequest(name), cancellationToken);
 
         /// <summary>
         /// Use this method to upload a .png file with a sticker for later use in createNewStickerSet and addStickerToSet methods (can be used multiple times).

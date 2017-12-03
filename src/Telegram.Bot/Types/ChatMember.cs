@@ -9,8 +9,7 @@ namespace Telegram.Bot.Types
     /// <summary>
     /// This object contains information about one member of the chat.
     /// </summary>
-    [JsonObject(MemberSerialization = MemberSerialization.OptIn,
-                NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
+    [JsonObject(MemberSerialization.OptIn, NamingStrategyType = typeof(SnakeCaseNamingStrategy))]
     public class ChatMember
     {
         /// <summary>
